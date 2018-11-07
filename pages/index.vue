@@ -8,15 +8,15 @@
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import TodoList from '~/components/TodoList.vue'
+import Logo from '../components/Logo.vue';
+import TodoList from '../components/TodoList.vue';
 
 export default {
   components: {
     Logo,
-    TodoList
-  }
-}
+    TodoList,
+  },
+};
 </script>
 
 <style lang="scss">

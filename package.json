@@ -13,17 +13,20 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.0.0",
     "cross-env": "^5.2.0",
-    "nuxt": "^2.0.0",
     "express": "^4.16.3",
-    "vuetify": "^1.2.4",
-    "@nuxtjs/axios": "^5.0.0"
+    "nuxt": "^2.0.0",
+    "vue": "^2.5.17",
+    "vuetify": "^1.2.4"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
-    "eslint": "^5.0.1",
+    "eslint": "^5.3.0",
+    "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^3.1.0",
     "eslint-loader": "^2.0.0",
+    "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "2.6.2",
     "eslint-plugin-vue": "^4.0.0",
     "node-sass": "^4.10.0",

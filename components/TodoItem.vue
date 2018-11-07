@@ -47,29 +47,29 @@
 export default {
   directives: {
     focus: {
-      inserted: function(el) {
-        el.focus()
-      }
-    }
+      inserted(el) {
+        el.focus();
+      },
+    },
   },
   props: {
     todo: {
       type: Object,
       requited: true,
-      default: function() {
-        return {}
-      }
+      default() {
+        return {};
+      },
     },
     index: {
       type: Number,
       requited: true,
-      default: 0
+      default: 0,
     },
     checkAll: {
       type: Boolean,
       requited: true,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -77,43 +77,43 @@ export default {
       title: this.todo.title,
       completed: this.todo.completed,
       editing: this.todo.editing,
-      todoBeforeEdit: ''
-    }
+      todoBeforeEdit: '',
+    };
   },
   watch: {
     checkAll() {
-      this.completed = this.checkAll ? true : this.todo.completed
-    }
+      this.completed = this.checkAll ? true : this.todo.completed;
+    },
   },
   methods: {
     startEditTodo() {
-      this.todoBeforeEdit = this.title
-      this.editing = true
+      this.todoBeforeEdit = this.title;
+      this.editing = true;
     },
     doneEditTodo() {
       if (this.title.trim().length === 0) {
-        this.title = this.todoBeforeEdit
+        this.title = this.todoBeforeEdit;
       }
-      this.editing = false
+      this.editing = false;
       this.$emit('doneEditTodo', {
         index: this.index,
         todo: {
           id: this.id,
           title: this.title,
           completed: this.completed,
-          editing: this.editing
-        }
-      })
+          editing: this.editing,
+        },
+      });
     },
     cancelEditTodo() {
-      this.title = this.todoBeforeEdit
-      this.editing = false
+      this.title = this.todoBeforeEdit;
+      this.editing = false;
     },
     destroyTodo(index) {
-      this.$emit('destroyTodo', index)
-    }
-  }
-}
+      this.$emit('destroyTodo', index);
+    },
+  },
+};
 </script>
 
 <style lang="scss">

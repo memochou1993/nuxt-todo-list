@@ -89,10 +89,11 @@
 </template>
 
 <script>
-import TodoItem from '~/components/TodoItem.vue'
+import TodoItem from './TodoItem.vue';
+
 export default {
   components: {
-    TodoItem
+    TodoItem,
   },
   data() {
     return {
@@ -105,70 +106,70 @@ export default {
           id: 1,
           title: '完成作業',
           completed: false,
-          editing: false
+          editing: false,
         },
         {
           id: 2,
           title: '繳交費用',
           completed: false,
-          editing: false
-        }
-      ]
-    }
+          editing: false,
+        },
+      ],
+    };
   },
   computed: {
     remaining() {
-      return this.todos.filter(todo => !todo.completed).length
+      return this.todos.filter((todo) => !todo.completed).length;
     },
     anyRemaining() {
-      return this.remaining !== 0
+      return this.remaining !== 0;
     },
     todosFiltered() {
       switch (this.filter) {
         case 'all':
-          return this.todos
+          return this.todos;
         case 'active':
-          return this.todos.filter(todo => !todo.completed)
+          return this.todos.filter((todo) => !todo.completed);
         case 'completed':
-          return this.todos.filter(todo => todo.completed)
+          return this.todos.filter((todo) => todo.completed);
         default:
-          return this.todos
+          return this.todos;
       }
     },
     showClearCompletedTodo() {
-      return this.todos.filter(todo => todo.completed).length > 0
-    }
+      return this.todos.filter((todo) => todo.completed).length > 0;
+    },
   },
   methods: {
     createTodo() {
       if (this.todoCreated.trim().length === 0) {
-        return
+        return;
       }
       this.todos.push({
         id: this.idForTodo,
         title: this.todoCreated,
         completed: false,
-        editing: false
-      })
-      this.todoCreated = ''
-      this.idForTodo += 1
+        editing: false,
+      });
+      this.todoCreated = '';
+      this.idForTodo += 1;
     },
     doneEditTodo(data) {
-      this.todos.splice(data.index, 1, data.todo)
+      this.todos.splice(data.index, 1, data.todo);
     },
     destroyTodo(index) {
-      this.todos.splice(index, 1)
+      this.todos.splice(index, 1);
     },
     checkAllTodos() {
-      this.todos.forEach(todo => {
-        todo.completed = event.target.checked
-      })
+      this.todos.forEach((todo) => {
+        todo.completed = window.event.target.checked;
+      });
     },
     clearCompletedTodo() {
-      this.todos = this.todos.filter(todo => !todo.completed)
-    }
-  }
-}
+      this.todos = this.todos.filter((todo) => !todo.completed);
+    },
+  },
+};
 </script>
 
 <style lang="scss">
