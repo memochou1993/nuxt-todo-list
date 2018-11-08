@@ -15,40 +15,13 @@
         :key="todo.id"
         :todo="todo"
         :index="index"
-        :check-all="!anyRemaining"
-        @doneEditTodo="doneEditTodo"
-        @destroyTodo="destroyTodo"/>
+        :check-all="!anyRemaining"/>
     </transition-group>
     <div>
       <v-layout
         align-center>
-        <v-flex
-          xs1>
-          <input
-            id="checkAllTodos"
-            :checked="!anyRemaining"
-            type="checkbox"
-            @change="checkAllTodos">
-        </v-flex>
-        <v-flex
-          xs5
-          text-xs-left>
-          <div
-            class="extra-container">
-            <label
-              for="checkAllTodos">
-              全選
-            </label>
-          </div>
-        </v-flex>
-        <v-flex
-          xs6
-          text-xs-right>
-          <div
-            @click="clearCompletedTodo">
-            剩餘 {{ remaining }} 件未完成事項
-          </div>
-        </v-flex>
+        <todo-check-all :any-remaining="anyRemaining"/>
+        <todo-item-remaining :remaining="remaining"/>
       </v-layout>
     </div>
     <div>
@@ -90,10 +63,14 @@
 
 <script>
 import TodoItem from './TodoItem.vue';
+import TodoItemRemaining from './TodoItemRemaining.vue';
+import TodoCheckAll from './TodoCheckAll.vue';
 
 export default {
   components: {
     TodoItem,
+    TodoItemRemaining,
+    TodoCheckAll,
   },
   data() {
     return {
@@ -139,6 +116,11 @@ export default {
     showClearCompletedTodo() {
       return this.todos.filter((todo) => todo.completed).length > 0;
     },
+  },
+  created() {
+    this.$bus.$on('destroyTodo', (index) => this.destroyTodo(index));
+    this.$bus.$on('doneEditTodo', (data) => this.doneEditTodo(data));
+    this.$bus.$on('checkAllTodos', (checked) => this.checkAllTodos(checked));
   },
   methods: {
     createTodo() {

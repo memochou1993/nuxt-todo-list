@@ -95,7 +95,7 @@ export default {
         this.title = this.todoBeforeEdit;
       }
       this.editing = false;
-      this.$emit('doneEditTodo', {
+      this.$bus.$emit('doneEditTodo', {
         index: this.index,
         todo: {
           id: this.id,
@@ -110,7 +110,7 @@ export default {
       this.editing = false;
     },
     destroyTodo(index) {
-      this.$emit('destroyTodo', index);
+      this.$bus.$emit('destroyTodo', index);
     },
   },
 };
