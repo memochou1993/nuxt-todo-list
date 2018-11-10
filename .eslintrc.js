@@ -24,5 +24,6 @@ module.exports = {
     'no-param-reassign': ['error', { 'props': false }],
     'arrow-parens': ['error', 'always'],
     'space-before-function-paren': ['error', 'never'],
+    'no-return-assign': ['error', 'except-parens'],
   },
 };

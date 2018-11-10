@@ -15,7 +15,8 @@
         :key="todo.id"
         :todo="todo"
         :index="index"
-        :check-all="!anyRemaining"/>
+        :check-all="!anyRemaining"
+        class="todo-item"/>
     </transition-group>
     <div>
       <v-layout
@@ -25,36 +26,17 @@
       </v-layout>
     </div>
     <div>
-      <v-layout
-        align-center>
+      <v-layout>
         <v-flex
-          xs12
+          xs8
           text-xs-left>
-          <div
-            class="extra-container">
-            <v-btn
-              :input-value="filter == 'all'"
-              @click="filter = 'all'">
-              所有
-            </v-btn>
-            <v-btn
-              :input-value="filter == 'active'"
-              @click="filter = 'active'">
-              進行中
-            </v-btn>
-            <v-btn
-              :input-value="filter == 'completed'"
-              @click="filter = 'completed'">
-              已完成
-            </v-btn>
-            <transition name="fade">
-              <v-btn
-                v-if="showClearCompletedTodo"
-                @click="clearCompletedTodo">
-                清除
-              </v-btn>
-            </transition>
-          </div>
+          <todo-filter/>
+        </v-flex>
+        <v-flex
+          xs4
+          text-xs-right>
+          <todo-clear-completed
+            :show-clear-completed-todo="showClearCompletedTodo"/>
         </v-flex>
       </v-layout>
     </div>
@@ -65,12 +47,16 @@
 import TodoItem from './TodoItem.vue';
 import TodoItemRemaining from './TodoItemRemaining.vue';
 import TodoCheckAll from './TodoCheckAll.vue';
+import TodoFilter from './TodoFilter.vue';
+import TodoClearCompleted from './TodoClearCompleted.vue';
 
 export default {
   components: {
     TodoItem,
     TodoItemRemaining,
     TodoCheckAll,
+    TodoFilter,
+    TodoClearCompleted,
   },
   data() {
     return {
@@ -121,6 +107,15 @@ export default {
     this.$bus.$on('destroyTodo', (index) => this.destroyTodo(index));
     this.$bus.$on('doneEditTodo', (data) => this.doneEditTodo(data));
     this.$bus.$on('checkAllTodos', (checked) => this.checkAllTodos(checked));
+    this.$bus.$on('changeFilter', (filter) => (this.filter = filter));
+    this.$bus.$on('clearCompletedTodo', () => this.clearCompletedTodo());
+  },
+  beforeDestroy() {
+    this.$bus.$off('destroyTodo', (index) => this.destroyTodo(index));
+    this.$bus.$off('doneEditTodo', (data) => this.doneEditTodo(data));
+    this.$bus.$off('checkAllTodos', (checked) => this.checkAllTodos(checked));
+    this.$bus.$off('changeFilter', (filter) => (this.filter = filter));
+    this.$bus.$off('clearCompletedTodo', () => this.clearCompletedTodo());
   },
   methods: {
     createTodo() {

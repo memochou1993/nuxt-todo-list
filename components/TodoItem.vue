@@ -1,6 +1,5 @@
 <template>
-  <div
-    class="todo-item">
+  <div>
     <v-layout
       wrap
       align-center>
@@ -115,6 +114,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-</style>
