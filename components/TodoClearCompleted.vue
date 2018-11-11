@@ -10,16 +10,16 @@
 
 <script>
 export default {
-  props: {
-    showClearCompletedTodo: {
-      type: Boolean,
-      required: true,
-      default: false,
+  computed: {
+    showClearCompletedTodo() {
+      return this.$store.getters.showClearCompletedTodo;
     },
   },
   methods: {
     clearCompletedTodo() {
-      this.$bus.$emit('clearCompletedTodo');
+      this.$store.state.todos = this.$store.state.todos.filter(
+        (todo) => !todo.completed,
+      );
     },
   },
 };

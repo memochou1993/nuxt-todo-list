@@ -19,11 +19,11 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
+    'arrow-parens': ['error', 'always'],
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-param-reassign': ['error', { 'props': false }],
-    'arrow-parens': ['error', 'always'],
-    'space-before-function-paren': ['error', 'never'],
     'no-return-assign': ['error', 'except-parens'],
+    'space-before-function-paren': ['error', 'never'],
   },
 };

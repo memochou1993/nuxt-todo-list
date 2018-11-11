@@ -15,27 +15,19 @@
       @click="changeFilter('completed')">
       已完成
     </v-btn>
-    <transition name="fade">
-      <v-btn
-        v-if="showClearCompletedTodo"
-        @click="clearCompletedTodo">
-        清除
-      </v-btn>
-    </transition>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      filter: 'all',
-    };
+  computed: {
+    filter() {
+      return this.$store.state.filter;
+    },
   },
   methods: {
     changeFilter(filter) {
-      this.filter = filter;
-      this.$bus.$emit('changeFilter', filter);
+      this.$store.state.filter = filter;
     },
   },
 };

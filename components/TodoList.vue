@@ -11,7 +11,7 @@
       enter-active-class="animated fadeIn"
       leave-active-class="animated fadeOut">
       <todo-item
-        v-for="(todo, index) in todosFiltered"
+        v-for="(todo, index) in filteredTodos"
         :key="todo.id"
         :todo="todo"
         :index="index"
@@ -21,8 +21,8 @@
     <div>
       <v-layout
         align-center>
-        <todo-check-all :any-remaining="anyRemaining"/>
-        <todo-item-remaining :remaining="remaining"/>
+        <todo-check-all/>
+        <todo-item-remaining/>
       </v-layout>
     </div>
     <div>
@@ -62,67 +62,49 @@ export default {
     return {
       todoCreated: '',
       todoBeforeEdit: '',
-      filter: 'all',
       idForTodo: 3,
-      todos: [
-        {
-          id: 1,
-          title: '完成作業',
-          completed: false,
-          editing: false,
-        },
-        {
-          id: 2,
-          title: '繳交費用',
-          completed: false,
-          editing: false,
-        },
-      ],
     };
   },
   computed: {
     remaining() {
-      return this.todos.filter((todo) => !todo.completed).length;
+      return this.$store.getters.remaining;
     },
     anyRemaining() {
-      return this.remaining !== 0;
+      return this.$store.getters.anyRemaining;
     },
-    todosFiltered() {
-      switch (this.filter) {
-        case 'all':
-          return this.todos;
-        case 'active':
-          return this.todos.filter((todo) => !todo.completed);
-        case 'completed':
-          return this.todos.filter((todo) => todo.completed);
-        default:
-          return this.todos;
-      }
+    filteredTodos() {
+      return this.$store.getters.filteredTodos;
     },
     showClearCompletedTodo() {
-      return this.todos.filter((todo) => todo.completed).length > 0;
+      return this.$store.getters.showClearCompletedTodo;
     },
   },
   created() {
-    this.$bus.$on('destroyTodo', (index) => this.destroyTodo(index));
-    this.$bus.$on('doneEditTodo', (data) => this.doneEditTodo(data));
-    this.$bus.$on('checkAllTodos', (checked) => this.checkAllTodos(checked));
-    this.$bus.$on('changeFilter', (filter) => (this.filter = filter));
-    this.$bus.$on('clearCompletedTodo', () => this.clearCompletedTodo());
+    // this.$bus.$on('destroyTodo', (index) => this.destroyTodo(index));
+    // this.$bus.$on('doneEditTodo', (data) => this.doneEditTodo(data));
+    // this.$bus.$on('checkAllTodos', (checked) => this.checkAllTodos(checked));
+    // this.$bus.$on(
+    //   'changeFilter',
+    //   (filter) => (this.$store.state.filter = filter),
+    // );
+    // this.$bus.$on('clearCompletedTodo', () => this.clearCompletedTodo());
   },
   beforeDestroy() {
-    this.$bus.$off('destroyTodo', (index) => this.destroyTodo(index));
-    this.$bus.$off('doneEditTodo', (data) => this.doneEditTodo(data));
-    this.$bus.$off('checkAllTodos', (checked) => this.checkAllTodos(checked));
-    this.$bus.$off('changeFilter', (filter) => (this.filter = filter));
-    this.$bus.$off('clearCompletedTodo', () => this.clearCompletedTodo());
+    // this.$bus.$off('destroyTodo', (index) => this.destroyTodo(index));
+    // this.$bus.$off('doneEditTodo', (data) => this.doneEditTodo(data));
+    // this.$bus.$off('checkAllTodos', (checked) => this.checkAllTodos(checked));
+    // this.$bus.$off(
+    //   'changeFilter',
+    //   (filter) => (this.$store.state.filter = filter),
+    // );
+    // this.$bus.$off('clearCompletedTodo', () => this.clearCompletedTodo());
   },
   methods: {
     createTodo() {
       if (this.todoCreated.trim().length === 0) {
         return;
       }
-      this.todos.push({
+      this.$store.state.todos.push({
         id: this.idForTodo,
         title: this.todoCreated,
         completed: false,
@@ -131,19 +113,15 @@ export default {
       this.todoCreated = '';
       this.idForTodo += 1;
     },
-    doneEditTodo(data) {
-      this.todos.splice(data.index, 1, data.todo);
-    },
-    destroyTodo(index) {
-      this.todos.splice(index, 1);
-    },
     checkAllTodos() {
-      this.todos.forEach((todo) => {
+      this.$store.state.todos.forEach((todo) => {
         todo.completed = window.event.target.checked;
       });
     },
     clearCompletedTodo() {
-      this.todos = this.todos.filter((todo) => !todo.completed);
+      this.$store.state.todos = this.$store.state.todos.filter(
+        (todo) => !todo.completed,
+      );
     },
   },
 };

@@ -30,16 +30,16 @@
 
 <script>
 export default {
-  props: {
-    anyRemaining: {
-      type: Boolean,
-      required: true,
-      default: false,
+  computed: {
+    anyRemaining() {
+      return this.$store.getters.anyRemaining;
     },
   },
   methods: {
     checkAllTodos() {
-      this.$bus.$emit('checkAllTodos', this.anyRemaining);
+      this.$store.state.todos.forEach((todo) => {
+        todo.completed = window.event.target.checked;
+      });
     },
   },
 };

@@ -94,14 +94,14 @@ export default {
         this.title = this.todoBeforeEdit;
       }
       this.editing = false;
-      this.$bus.$emit('doneEditTodo', {
-        index: this.index,
-        todo: {
-          id: this.id,
-          title: this.title,
-          completed: this.completed,
-          editing: this.editing,
-        },
+      const index = this.$store.state.todos.findIndex(
+        (item) => item.id === this.todo.id,
+      );
+      this.$store.state.todos.splice(index, 1, {
+        id: this.id,
+        title: this.title,
+        completed: this.completed,
+        editing: this.editing,
       });
     },
     cancelEditTodo() {
@@ -109,7 +109,7 @@ export default {
       this.editing = false;
     },
     destroyTodo(index) {
-      this.$bus.$emit('destroyTodo', index);
+      this.$store.state.todos.splice(index, 1);
     },
   },
 };
