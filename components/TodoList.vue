@@ -79,49 +79,17 @@ export default {
       return this.$store.getters.showClearCompletedTodo;
     },
   },
-  created() {
-    // this.$bus.$on('destroyTodo', (index) => this.destroyTodo(index));
-    // this.$bus.$on('doneEditTodo', (data) => this.doneEditTodo(data));
-    // this.$bus.$on('checkAllTodos', (checked) => this.checkAllTodos(checked));
-    // this.$bus.$on(
-    //   'changeFilter',
-    //   (filter) => (this.$store.state.filter = filter),
-    // );
-    // this.$bus.$on('clearCompletedTodo', () => this.clearCompletedTodo());
-  },
-  beforeDestroy() {
-    // this.$bus.$off('destroyTodo', (index) => this.destroyTodo(index));
-    // this.$bus.$off('doneEditTodo', (data) => this.doneEditTodo(data));
-    // this.$bus.$off('checkAllTodos', (checked) => this.checkAllTodos(checked));
-    // this.$bus.$off(
-    //   'changeFilter',
-    //   (filter) => (this.$store.state.filter = filter),
-    // );
-    // this.$bus.$off('clearCompletedTodo', () => this.clearCompletedTodo());
-  },
   methods: {
     createTodo() {
       if (this.todoCreated.trim().length === 0) {
         return;
       }
-      this.$store.state.todos.push({
+      this.$store.commit('createTodo', {
         id: this.idForTodo,
         title: this.todoCreated,
-        completed: false,
-        editing: false,
       });
       this.todoCreated = '';
       this.idForTodo += 1;
-    },
-    checkAllTodos() {
-      this.$store.state.todos.forEach((todo) => {
-        todo.completed = window.event.target.checked;
-      });
-    },
-    clearCompletedTodo() {
-      this.$store.state.todos = this.$store.state.todos.filter(
-        (todo) => !todo.completed,
-      );
     },
   },
 };

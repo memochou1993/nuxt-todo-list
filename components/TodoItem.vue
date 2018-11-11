@@ -94,10 +94,7 @@ export default {
         this.title = this.todoBeforeEdit;
       }
       this.editing = false;
-      const index = this.$store.state.todos.findIndex(
-        (item) => item.id === this.todo.id,
-      );
-      this.$store.state.todos.splice(index, 1, {
+      this.$store.commit('doneEditTodo', {
         id: this.id,
         title: this.title,
         completed: this.completed,
@@ -109,7 +106,7 @@ export default {
       this.editing = false;
     },
     destroyTodo(index) {
-      this.$store.state.todos.splice(index, 1);
+      this.$store.commit('destroyTodo', index);
     },
   },
 };

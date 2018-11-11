@@ -45,6 +45,37 @@ const store = new Vuex.Store({
       return completedTodo.length > 0;
     },
   },
+  mutations: {
+    createTodo(state, todo) {
+      state.todos.push({
+        id: todo.id,
+        title: todo.title,
+      });
+    },
+    clearCompletedTodo(state) {
+      state.todos = state.todos.filter((todo) => !todo.completed);
+    },
+    changeFilter(state, filter) {
+      state.filter = filter;
+    },
+    checkAllTodos(state, checked) {
+      state.todos.forEach((todo) => {
+        todo.completed = checked;
+      });
+    },
+    doneEditTodo(state, todo) {
+      const index = state.todos.findIndex((item) => item.id === todo.id);
+      state.todos.splice(index, 1, {
+        id: todo.id,
+        title: todo.title,
+        completed: todo.completed,
+        editing: todo.editing,
+      });
+    },
+    destroyTodo(state, index) {
+      state.todos.splice(index, 1);
+    },
+  },
 });
 
 export default () => store;
