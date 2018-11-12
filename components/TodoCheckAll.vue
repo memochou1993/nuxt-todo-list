@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     checkAllTodos() {
-      this.$store.commit('checkAllTodos', window.event.target.checked);
+      this.$store.dispatch('checkAllTodos', window.event.target.checked);
     },
   },
 };

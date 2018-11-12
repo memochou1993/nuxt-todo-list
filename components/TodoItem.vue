@@ -94,7 +94,7 @@ export default {
         this.title = this.todoBeforeEdit;
       }
       this.editing = false;
-      this.$store.commit('doneEditTodo', {
+      this.$store.dispatch('doneEditTodo', {
         id: this.id,
         title: this.title,
         completed: this.completed,
@@ -106,7 +106,7 @@ export default {
       this.editing = false;
     },
     destroyTodo(index) {
-      this.$store.commit('destroyTodo', index);
+      this.$store.dispatch('destroyTodo', index);
     },
   },
 };

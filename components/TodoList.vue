@@ -61,14 +61,10 @@ export default {
   data() {
     return {
       todoCreated: '',
-      todoBeforeEdit: '',
       idForTodo: 3,
     };
   },
   computed: {
-    remaining() {
-      return this.$store.getters.remaining;
-    },
     anyRemaining() {
       return this.$store.getters.anyRemaining;
     },
@@ -84,7 +80,7 @@ export default {
       if (this.todoCreated.trim().length === 0) {
         return;
       }
-      this.$store.commit('createTodo', {
+      this.$store.dispatch('createTodo', {
         id: this.idForTodo,
         title: this.todoCreated,
       });
