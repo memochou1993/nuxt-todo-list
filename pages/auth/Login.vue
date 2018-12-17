@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div class="container">
     <v-form
-      v-model="valid">
+      v-model="valid"
+      @submit.prevent="login()">
       <v-text-field
-        v-model="username"
+        v-model="credentials.username"
         :rules="rules.username"
         label="Username"
         hint=""
@@ -11,7 +12,7 @@
         required
       />
       <v-text-field
-        v-model="password"
+        v-model="credentials.password"
         :type="showPassword ? 'text' : 'password'"
         :append-icon="showPassword ? 'visibility_off' : 'visibility'"
         :rules="rules.password"
@@ -26,13 +27,12 @@
         text-xs-right>
         <v-btn
           :disabled="!valid"
-          @click="login()">
+          type="submit">
           登入
         </v-btn>
       </v-flex>
     </v-form>
-    {{ tokenType }} {{ accessToken }}
-    {{ message }}
+    {{ this.$store.state.message }}
   </div>
 </template>
 
@@ -41,8 +41,10 @@ export default {
   data() {
     return {
       valid: true,
-      username: '',
-      password: '',
+      credentials: {
+        username: '',
+        password: '',
+      },
       showPassword: false,
       rules: {
         username: [
@@ -54,30 +56,18 @@ export default {
           (v) => v.length >= 6 || 'Password must be at least 6.',
         ],
       },
-      tokenType: '',
-      accessToken: '',
       message: '',
     };
   },
   methods: {
     login() {
-      this.$axios({
-        method: 'POST',
-        url: 'http://passport.test/oauth/token',
-        data: {
-          grant_type: process.env.grantType,
-          client_id: process.env.clientId,
-          client_secret: process.env.clientSecret,
-          username: this.username,
-          password: this.password,
-        },
-      })
-        .then(({ data }) => {
-          this.tokenType = data.token_type;
-          this.accessToken = data.access_token;
+      this.$store
+        .dispatch('retrieveToken', {
+          username: this.credentials.username,
+          password: this.credentials.password,
         })
-        .catch((error) => {
-          this.message = error.response.data.message;
+        .then(() => {
+          this.$router.push('/');
         });
     },
   },

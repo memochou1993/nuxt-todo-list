@@ -5,6 +5,12 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
+    credentials: {
+      username: '',
+      password: '',
+    },
+    token: localStorage.getItem('access_token') || null,
+    message: '',
     filter: 'all',
     todos: [
       {
@@ -22,6 +28,9 @@ const store = new Vuex.Store({
     ],
   },
   getters: {
+    loggedIn(state) {
+      return state.token !== null;
+    },
     remaining(state) {
       return state.todos.filter((todo) => !todo.completed).length;
     },
@@ -46,6 +55,15 @@ const store = new Vuex.Store({
     },
   },
   mutations: {
+    retrieveMessage(state, message) {
+      state.message = message;
+    },
+    retrieveToken(state, token) {
+      state.token = token;
+    },
+    destroyToken(state) {
+      state.token = null;
+    },
     createTodo(state, todo) {
       state.todos.push({
         id: todo.id,
@@ -77,6 +95,52 @@ const store = new Vuex.Store({
     },
   },
   actions: {
+    retrieveToken(context, credentials) {
+      return new Promise((resolve, reject) => {
+        this.$axios({
+          method: 'POST',
+          url: 'http://passport.test/oauth/token',
+          data: {
+            grant_type: process.env.grantType,
+            client_id: process.env.clientId,
+            client_secret: process.env.clientSecret,
+            username: credentials.username,
+            password: credentials.password,
+          },
+        })
+          .then(({ data }) => {
+            const token = `${data.token_type} ${data.access_token}`;
+            localStorage.setItem('access_token', token);
+            context.commit('retrieveToken', token);
+            resolve(data);
+          })
+          .catch((error) => {
+            context.commit('retrieveMessage', error.response.data.message);
+            reject(error);
+          });
+      });
+    },
+    destroyToken(context) {
+      return new Promise((resolve, reject) => {
+        this.$axios({
+          method: 'GET',
+          url: 'http://passport.test/api/user/logout',
+          headers: {
+            Authorization: context.state.token,
+          },
+        })
+          .then((response) => {
+            localStorage.removeItem('access_token');
+            context.commit('destroyToken');
+            resolve(response);
+          })
+          .catch((error) => {
+            localStorage.removeItem('access_token');
+            context.commit('destroyToken');
+            reject(error);
+          });
+      });
+    },
     createTodo(context, todo) {
       setTimeout(() => {
         context.commit('createTodo', todo);
