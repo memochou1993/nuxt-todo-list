@@ -54,19 +54,19 @@ export default {
   props: {
     todo: {
       type: Object,
-      requited: true,
+      required: true,
       default() {
         return {};
       },
     },
     index: {
       type: Number,
-      requited: true,
+      required: true,
       default: 0,
     },
     checkAll: {
       type: Boolean,
-      requited: true,
+      required: true,
       default: false,
     },
   },
